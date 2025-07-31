@@ -1,4 +1,4 @@
-# CL-Compiler-Construction
+# 🧠 Compiler Construction – Classroom Language (CL)
 
 This repository contains a two-part compiler project for a custom programming language called **Classroom Language (CL)**. 
 
@@ -80,7 +80,5 @@ The project is divided into two main milestones:
 
 ## ✍️ Author
 Hamza Afzal
-
-📧 hamzaafzal.cs@gmail.com
  
 ---
