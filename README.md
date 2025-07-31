@@ -49,7 +49,7 @@ The project is divided into two main milestones:
 │   ├── 📄 SymbolTable.java              # Symbol table class
 │   ├── 📄 Loop.txt                      # Sample CL code (basic)
 │   ├── 📄 SwitchCase.txt                # Sample CL code (basic)
-│   └── 📘 README.md                    # Milestone 1 instructions
+│   └── 📘 README.md                    # Readme  File
 
 ├── 📂 Milestone-2-BackEnd/             # Semantic Analysis + Code Generation
 │   ├── 📄 Parser.jjt                   # JavaCC grammar reused from M1
@@ -60,7 +60,7 @@ The project is divided into two main milestones:
 │   ├── 📄 SemanticException.java       # Exception class for semantic errors
 │   ├── 📄 Loop.txt                     # Test file (extended CL source code)
 │   ├── 📄 Compilation Steps.docx       # Manual compile/run instructions
-│   └── 📘 README.md                    # Milestone 2 documentation
+│   └── 📘 README.md                    # Readme File
 ```
 ## 🛠️ Setup & Compilation Instructions
 ✅ Prerequisites
