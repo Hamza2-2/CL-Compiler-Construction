@@ -13,7 +13,6 @@ This project implements the **front-end** of a compiler for the Classroom Langua
  ┣ 📜 SymbolTable.java  # Java symbol table implementation
  ┗ 📜 Loop.txt          # Sample CL input file
  ┗ 📜 SwitchFor.txt          # Sample CL input file
- 
 ```
   
 ## 🛠️ Setup & Usage  
