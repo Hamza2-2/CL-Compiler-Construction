@@ -12,7 +12,7 @@ This project implements the **front-end** of a compiler for the Classroom Langua
  ┣ 📜 Parser.jjt        # JavaCC grammar (lexer + parser)
  ┣ 📜 SymbolTable.java  # Java symbol table implementation
  ┗ 📜 Loop.txt          # Sample CL input file
- ┗ 📜 SwitchFor.txt          # Sample CL input file
+ ┗ 📜 SwitchCase.txt          # Sample CL input file
 ```
   
 ## 🛠️ Setup & Usage  
