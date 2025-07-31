@@ -1,0 +1,415 @@
+/**
+ * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options
+{
+  static = false;
+}
+
+
+
+PARSER_BEGIN(Parser)
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+
+
+public class Parser
+{
+
+      private ST st;
+      private SemanticAnalysis sa;
+  
+    public void setSymbolTable()
+    {
+      this.st = new ST();
+    }
+
+    public void setSemanticAnalysis()
+    {
+      this.sa = new SemanticAnalysis(st);
+    }
+ 
+ 
+  public static void main(String args [])
+  {    
+       String inputFilePath = args[0];
+
+        StringBuilder inputBuilder = new StringBuilder();
+        String line;
+
+try { 
+       
+BufferedReader br = new BufferedReader(new FileReader(inputFilePath));
+            while ((line = br.readLine()) != null) {
+                inputBuilder.append(line).append("\n"); 
+            }
+        }
+     catch (IOException e)
+     {
+            System.out.println("Error reading file: " + e.getMessage());
+            return;
+        }
+
+    String input = inputBuilder.toString().trim(); 
+    StringReader sr = new StringReader(input);
+
+   Parser p =  new Parser(sr);
+    
+    
+    try
+    {
+  
+
+      p.setSymbolTable();
+      p.setSemanticAnalysis();
+      SimpleNode n = p.S();
+      CodeGenerator codeGenerator = new CodeGenerator(n);
+      System.out.println("Parsing completed successfully.");
+      p.showSymbolTable();
+       n.dump("");
+  	    String generatedCode = codeGenerator.generate();
+        System.out.println("Generated Code:");
+        System.out.println(generatedCode);
+        codeGenerator.printTable();
+      System.out.println("Thank you.");
+  
+    }
+    catch (Exception e)
+    {
+      System.out.println("Oops.");
+      System.out.println(e.getMessage());
+    }
+    
+   }
+/*
+    
+   */
+// As Grammar only supports two types int and string soo
+
+
+
+
+void showSymbolTable() {
+  sa.showSymbolTable();
+}
+
+
+
+
+}
+
+PARSER_END(Parser)
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+// Tokens For Keywords
+
+TOKEN :
+{
+  < START_PROGRAM : "startProgram" >
+  | < END_PROGRAM : "endProgram" >
+  |< VARIABLES : "variables:" >
+  | < INT : "int" >
+  |  < STRING : "string" >
+  |  < CODE : "code:" >
+  |  < OUTSTRING : "outString" >
+  | < LOOPIF : "loopif" >
+  | < ENDLOOP : "endLoop" >
+  |  < HOLDS : "holds" >
+  | < SWITCHFOR : "switchFor" >
+  | < ENDSWITCHFOR : "endSwitchFor" >
+  | < CASE : "case" >
+  | < OTHER : "other:" >
+
+  
+  
+}
+
+// Token for identifiers and integers
+
+TOKEN :
+{
+  < IDENTIFIER : (["a"-"z","A"-"Z"])+ >
+  | < INTEGER : (["0"-"9"])+ >
+  |  < STRING_LITERAL : "\"" (~["\"","\n","\r"])* "\"" >
+ 
+}
+
+// Token for special characters
+
+TOKEN :
+{
+  < SEMICOLON : ";" >
+  | < EQUAL : "=" >
+  | < LPAREN : "(" >
+  | < RPAREN : ")" >
+}
+
+
+// Comparison Tokens
+
+TOKEN :
+{
+  < LESS_THAN : "<" >
+  | < GREATER_THAN : ">" >
+  | < LESS_THAN_EQUAL : "<=" >
+  | < GREATER_THAN_EQUAL : ">=" >
+  | < EQUAL_EQUAL : "==" >
+  | < NOT_EQUAL : "<>" >
+}
+
+// Token Operators
+
+TOKEN :
+{
+  < PLUS : "+" >
+  | < MINUS : "-" >
+  | < MULTIPLY : "*" >
+  | < DIVIDE : "/" >
+}
+
+
+
+
+
+
+
+SimpleNode S() :
+{
+
+}
+
+{
+  <START_PROGRAM>  Variables() Code()  <END_PROGRAM>
+  {
+    return jjtThis;
+  }
+}
+
+
+// VariableDeclration
+
+void Variables() :
+{}
+{
+  <VARIABLES>  (intDecl() | strDecl() )*
+}
+
+void intDecl() :
+{
+Token id;
+int value = 0;
+ }
+{
+"int" id=<IDENTIFIER>  ( "=" value = Integer() )? ";" {
+  sa.declareVariable(id.image, "int" , value);
+  jjtThis.value = id.image;
+}
+}
+
+void strDecl() :
+{Token id;
+String value = "";
+}
+{
+  "string" id=< IDENTIFIER> ("=" value = StringLiteral())? ";" {
+    sa.declareVariable(id.image, "string" , value );
+    jjtThis.value = id.image;
+  }
+}
+
+
+// Main Code Area
+
+void Code() :
+{
+}
+{
+   <CODE>(Statement())*
+}
+
+void Statement() :
+{
+}
+{
+  Output()
+| Assignment()
+| LoopIf()
+| SwitchStatement()
+
+  
+}
+
+// For Output Statement
+
+void Output():
+{
+}
+{
+  <OUTSTRING> <LPAREN > (StringLiteral() | Expression( )  ) <RPAREN> <SEMICOLON>
+}
+
+// for assignment
+
+void Assignment() :
+{
+  Token id;
+}
+{
+  id = <IDENTIFIER> "=" Expression() ";"
+  {
+    jjtThis.value = id.image;
+  }
+}
+// for expression
+
+void Expression():
+{ }
+{
+AdditiveExpression()
+}
+
+
+void AdditiveExpression() :
+{}
+{
+    MultiplicativeExpression()
+    (
+        "+" MultiplicativeExpression() { jjtThis.value = "+"; }
+        | "-" MultiplicativeExpression() { jjtThis.value = "-"; }
+    )*
+}
+
+void MultiplicativeExpression() :
+{}
+{
+    UnaryExpression()
+    (
+        "*" UnaryExpression() { jjtThis.value = "*"; }
+        | "/" UnaryExpression() { jjtThis.value = "/"; }
+    )*
+}
+
+void UnaryExpression() :
+{}
+{
+
+  
+    (
+        "-" UnaryExpression() { jjtThis.value = "-"; }
+        | "+" UnaryExpression() { jjtThis.value = "+"; }
+        | "(" Expression() ")"
+        | Identifier()
+        | Integer()
+    )
+}
+
+
+// for identifiers , integers and string literals
+
+void Identifier() :
+{Token t;}
+{
+    t=<IDENTIFIER> { jjtThis.value = t.image; }
+}
+
+int Integer() :
+{Token t;}
+{
+    t=<INTEGER> { jjtThis.value = t.image;
+    return Integer.parseInt(t.image);
+    }
+}
+
+String StringLiteral() :
+{Token t;}
+{
+    t=<STRING_LITERAL> { jjtThis.value = t.image;
+    return t.image;
+    }
+}
+
+
+
+
+// For loop statements
+
+void LoopIf():
+{
+}
+{
+  <LOOPIF> Condition() <HOLDS> (Assignment())* <ENDLOOP>
+}
+
+void Condition():
+{
+}
+{
+Choice()
+Comparison()
+Choice()
+}
+
+void Comparison():
+{
+}
+{
+  "<" { jjtThis.value = "<"; }
+  | ">" { jjtThis.value = ">"; }
+  | "<=" { jjtThis.value = "<="; }
+  | ">=" { jjtThis.value = ">="; }
+  | "==" { jjtThis.value = "=="; }
+  | "<>" { jjtThis.value = "<>"; }
+}
+
+ 
+
+
+void Choice() : {
+  Token id;
+}
+{
+  id = < IDENTIFIER > { jjtThis.value = id.image; }
+  | id = < INTEGER > { jjtThis.value = id.image; }
+}
+
+
+// For Switch Statement
+
+void SwitchStatement():
+{
+}
+{
+  < SWITCHFOR > <LPAREN > (Identifier()) <RPAREN>
+
+  (CaseStatement())*
+
+  < OTHER > (Assignment())* <ENDSWITCHFOR>
+   
+  
+}
+// For Case Statement
+void CaseStatement():
+{
+}
+{
+  < CASE > ( Integer() | StringLiteral() )
+  (
+    (Assignment())*
+  )
+}
+
+
+
+
+
+
+
+

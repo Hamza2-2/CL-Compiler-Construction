@@ -1,0 +1,14 @@
+startProgram
+variables:
+string a = "taha";
+int b = 0;
+code:
+switchFor(a)
+case "taha"
+b=b+1;
+case "ali"
+b=b+2;
+other:
+b=b+3;
+endSwitchFor
+endProgram
