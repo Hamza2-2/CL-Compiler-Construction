@@ -1,5 +1,5 @@
-# Compiler Construction -(Back-End)  
-**Semantic Analyzer & Intermediate Code Generator**  
+# Compiler Construction -(Back-End) - **Semantic Analyzer & Intermediate Code Generator**  
+ 
 
 ## 📌 Overview  
 Extends the Milestone 1 front-end with:  
@@ -16,35 +16,42 @@ Extends the Milestone 1 front-end with:
  ┣ 📜 SemanticAnalysis.java   # Semantic analysis with type checking
  ┣ 📜 SemanticException.java  # Custom exception class for semantic errors
  ┣ 📜 CodeGenerator.java      # Generates intermediate 3-address code (quadruples)
- ┣ 📜 Loop.txt                # Input CL program for testing
- ┣ 📜 README.md               # Project documentation
- 
+ ┣ 📜 Loop.txt                # Input CL program for testing 
 ```
 ## 🛠️ Setup & Usage  
 1. **Requirements**:  
    - Java JDK 11+  
-   - Completed Milestone 1 (`CL.jjt`).  
+   - Compiler Extended - Back_End - Semantic Analyzer & Intermediate Code Generation File  
 
 2. **Steps**:  
-   ```bash
-   # Compile all Java files:
-   javac *.java
 
-   # Run semantic analysis + code generation:
-   java SemanticAnalyzer test.cl
-   java IntermediateCodeGen test.cl
+  - Generate the Parser
+     ```bash
+      javacc Parser.jjt
+
+  - Compile All Java Files
+     ```bash
+     javac *.java
+  - Run the Compiler
+     Use your test file (e.g., Loop.txt) to run semantic analysis and generate intermediate code:
+     ```bash
+       java Parser Loop.txt
  
 3. **Output**:
 
-    - Semantic Errors:
-      ```bash
-      Error (Line 5): Type mismatch - Cannot add 'string' and 'int'.
+    - Semantic Phase:
+       - Semantic Error
       
-    - Quadruples:
-      ```bash
-      1: t1 = b * c
-      2: t2 = t1 + d
-      3: a = t2
+         ```bash
+         Error (Line 5): Type mismatch - Cannot add 'string' and 'int'.
+      
+    - Code Generation Phase:
+      
+       Displays 3-address intermediate code as quadruples
+        ```bash
+        1: t1 = b * c
+        2: t2 = t1 + d
+        3: a = t2
 
 ## 🚀 Features
 
@@ -68,4 +75,8 @@ Extends the Milestone 1 front-end with:
   - `loopif`, `switchFor`
   - `if/else`, assignments, `outString`, etc.
 
+
+
+##  📸 Output Result - Processing Input CL File
 ---
+<img width="807" height="862" alt="image" src="https://github.com/user-attachments/assets/b8b0647c-dc71-4047-905e-30ff82427c1e" />
